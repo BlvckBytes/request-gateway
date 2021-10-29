@@ -1,6 +1,15 @@
 # request-gateway
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 Proxy requests between a common HTTP(S) endpoint using standard ports, and internal services, designated with custom ports. Routing happens based on protocol, domain and path, where paths offer full *regex* support.
+
+## Table of Contents
+* [Installation](#installation)
+* [Configuration](#configuration)
+  * [Common Settings](#common-settings)
+  * [Routes](#routes)
 
 ## Installation
 
