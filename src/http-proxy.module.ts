@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import http, { IncomingMessage } from 'http';
 import https from 'https';
 import { URLSearchParams } from 'url';
+import { ErrorResponse } from './error-response.interface';
 import { IHandler } from './handler.interface';
 
 const proxyRequest = (req: Request, res: Response, handler: IHandler) => {
@@ -57,6 +58,27 @@ const proxyRequest = (req: Request, res: Response, handler: IHandler) => {
   const proxyReq = handler.https
     ? https.request(proxyReqConf, proxyResHandler)
     : http.request(proxyReqConf, proxyResHandler);
+
+  // Handle requesting errors
+  proxyReq.on('error', (e: any) => {
+    // Map to a more human-readable error description
+    let msg = 'An error occurred during request-processing!';
+    switch (e.code) {
+      case 'ECONNREFUSED':
+        msg = 'Connection refused, endpoint is not responding!';
+        break;
+
+      case 'ERR_TLS_CERT_ALTNAME_INVALID':
+        msg = 'The requested subdomain is not within the registered cert!';
+        break;
+    }
+
+    res.statusCode = 500;
+    res.send({
+      code: e.code,
+      message: msg,
+    } as ErrorResponse);
+  });
 
   // Incoming request read till end, send to proxy
   req.on('end', () => {

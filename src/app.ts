@@ -7,6 +7,7 @@ import path from 'path';
 import Config from './config.class';
 import findHandler from './route-handler.module';
 import proxyRequest from './http-proxy.module';
+import { ErrorResponse } from './error-response.interface';
 
 // Setup express and disable cors
 const app = express();
@@ -31,17 +32,15 @@ app.all(/.*/, (req, res) => {
 
     // Unknown endpoint
     res.statusCode = 404;
-    res.send('Unknown endpoint! Please try another sub-domain or path!');
+    res.send({
+      code: 'EUNKNOWNEP',
+      message: 'Unknown endpoint, please try another sub-domain or path!',
+    } as ErrorResponse);
     return;
   }
 
   // Proxy this valid request
-  try {
-    proxyRequest(req, res, handler);
-  } catch (e) {
-    res.statusCode = 500;
-    res.send('An internal error occurred while relaying your request!');
-  }
+  proxyRequest(req, res, handler);
 });
 
 // Listen on port 80

@@ -24,6 +24,7 @@
       "comma-dangle": "off",
       "no-continue": "off",
       "no-console": "off",
+      "default-case": "off",
       "curly": ["error", "multi-or-nest"],
       "no-return-assign": ["error", "except-parens"],
       "nonblock-statement-body-position": ["error", "below"],
